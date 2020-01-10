@@ -44,13 +44,15 @@ class LoginProviderFormState extends State<LoginProvider> {
       httpClient.close();
       Map data = json.decode(reply);
       String status = data['status'].toString();
-      for(var d in data['err']){
+      String err = data['err'].toString();
+      /*for(var d in data['err']){
         print(" ${d}");
         setState(() {
           id=d['id'];
 
         });
-      }
+      }*/
+
       print('RESPONCE_DATA : ' + status);
       CustomProgressLoader.cancelLoader(context);
 
