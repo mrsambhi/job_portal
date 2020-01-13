@@ -52,7 +52,7 @@ class LoginSeekerFormState extends State<LoginSeeker> {
 
         });
       }*/
-
+      print(err);
       print('RESPONCE_DATA : ' + status);
       CustomProgressLoader.cancelLoader(context);
 
