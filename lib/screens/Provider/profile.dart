@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 bool _isEnabled = false;
-
+bool _canShowButton = false;
 // Create a Form widget.
 
 class MyProfile extends StatefulWidget {
@@ -17,7 +17,7 @@ class MyProfileState extends State<MyProfile> {
   void tapping(){
     setState(() {
       _isEnabled = ! _isEnabled;
-
+      _canShowButton = !_canShowButton;
     });}
 
 
@@ -44,11 +44,19 @@ class MyProfileState extends State<MyProfile> {
                   tapping();
                 },
               ),
-            ]
-        ),
-        body:
-      /*),
-    );*/Material(
+              _canShowButton
+                  ? IconButton(
+        icon:Icon(Icons.save),
+        onPressed: () {
+          tapping();
+        },
+      ):SizedBox(),
+
+          ]
+    ),
+
+
+        body: Material(
       child: SingleChildScrollView(
         child: Container(
           padding:EdgeInsets.all(25.0),

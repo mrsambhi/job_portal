@@ -357,7 +357,7 @@ Future validation() async {
                   padding:EdgeInsets.all(5.0),
                   child: RaisedButton(
                     color: Colors.red[300],
-                    /*onPressed: ,*/
+                    onPressed:validation ,
                     child: Text('Register ',style: new TextStyle(fontSize: 17.0,
                       color: Colors.white,
                     ),

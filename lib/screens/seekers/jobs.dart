@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:job_portal/screens/seekers/jobdetails.dart';
 //import 'package:flappy_search_bar/search_bar_style.dart';
 void main() => runApp(MyApp());
 
@@ -7,11 +8,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
 
-      title: 'Flutter Demo',
+      title: '',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.cyan,
-      ),
       home: MyHomePage(),
     );
   }
@@ -109,10 +107,11 @@ class ListItemWidget extends State<SwipeList> {
                                       padding: EdgeInsets.fromLTRB(8.0,8.0,8.0,8.0),
                                       splashColor: Colors.blueAccent,
                                       onPressed: () {
-                                        /*...*/
+                                        Navigator.push(context,MaterialPageRoute(builder: (context) => JobDetails()));
+
                                       },
                                       child: Text(
-                                        "View Applicants",
+                                        "View Job Details",
                                         style: TextStyle(fontSize: 10.0),
                                       ),
                                     ),
