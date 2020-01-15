@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -254,7 +255,7 @@ class ListItemWidget extends State<HomePageProvider> {
         }
         );
   }
-  List items = getDummyList();
+
   //int _currentIndex = 0;
   @override
   Widget build(BuildContext context) {
@@ -307,65 +308,76 @@ class ListItemWidget extends State<HomePageProvider> {
             return new  Card(
               elevation: 5,
               child: Container(
-                height: 150.0,
                 child: Row(
                   children: <Widget>[
                     Expanded(
                       child: Container(
-                        height: 100,
                         child: Padding(
                           padding: EdgeInsets.fromLTRB(10, 2, 0, 0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text(
-                                items[index],
-                              ),
+
                               Padding(
-                                padding: EdgeInsets.fromLTRB(0, 5, 0, 2),
-                                child: Container(
-                                  width: 300,
-                                  height:20,
-                                  child: Column(
-                                      children:<Widget>[
-                                        Text("Job Title:   Software Engineer",style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.black,
-                                        ),),
-                                        Flexible(
-                                          child: Text("Posted On:   12th Decemeber 2019",style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.black,
-                                          ),),
-                                        ),
-                                      ]
-                                  ),
+                                padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                child: Column(
+                                    children:<Widget>[
+                                      Text("Job Title:   ${result[index]["Job Title"]}",style: TextStyle(
+                                        fontSize: 20,
+                                        color: Colors.black,
+                                      ),
+                                      textAlign: TextAlign.start,),
+                                      Text("Place:   ${result[index]["Location"]}",style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.black,
+                                      ),
+                                        textAlign: TextAlign.start,
+                                      ),
+                                      Text("Category:   ${result[index]["Category"]}",style: TextStyle(
+                                        fontSize:15,
+                                        color: Colors.black,
+                                      ),
+                                        textAlign: TextAlign.start,),
+                                      Text("Status:   ${result[index]["Status"]}",style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.black,
+                                      ),
+                                        textAlign: TextAlign.start,),
+                                      Text("Skills Required:   ${result[index]["Skills required"]}",style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.black,
+                                      ),
+                                        textAlign: TextAlign.start,),
+
+                                    ]
                                 ),
                               ),
-                              SizedBox(
-                                height: 7.0,
+                              Divider(
+                                  color: Colors.black
                               ),
-                              Align(
-                                  alignment: Alignment.bottomRight,
-                                  child:
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 8.0),
-                                    child: FlatButton(
-                                      color: Colors.cyan,
-                                      textColor: Colors.white,
-                                      disabledColor: Colors.grey,
-                                      disabledTextColor: Colors.black,
-                                      padding: EdgeInsets.fromLTRB(8.0,8.0,8.0,8.0),
-                                      splashColor: Colors.cyanAccent,
-                                      onPressed: () {
+                              Padding(
+                                padding: EdgeInsets.only(bottom:5.0),
+                                child: Align(
+                                    alignment: Alignment.bottomRight,
+                                    child:
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 8.0),
+                                      child: FlatButton(
+                                        color: Colors.cyan,
+                                        textColor: Colors.white,
+                                        disabledColor: Colors.grey,
+                                        disabledTextColor: Colors.black,
+                                        splashColor: Colors.cyanAccent,
+                                        onPressed: () {
 
-                                      },
-                                      child: Text(
-                                        "View Applicants",
-                                        style: TextStyle(fontSize: 10.0),
+                                        },
+                                        child: Text(
+                                          "View Applicants",
+                                          style: TextStyle(fontSize: 10.0),
+                                        ),
                                       ),
-                                    ),
-                                  )
+                                    )
+                                ),
                               )
                             ],
                           ),
@@ -377,22 +389,9 @@ class ListItemWidget extends State<HomePageProvider> {
               ),
             );
           },
-        ), /*ListView.builder(
-
-          itemCount: items.length,
-          itemBuilder: (context, index) {
-            return
-          },
-        ),*/
+        ),
       ),
     );
-  }
-
-  static List getDummyList() {
-    List list = List.generate(10, (i) {
-      return "Job ${i + 1}";
-    });
-    return list;
   }
 
 }
