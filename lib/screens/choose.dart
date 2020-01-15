@@ -65,8 +65,8 @@ class ChoosePageState extends State<Choose> {
         child: Container(
         decoration: BoxDecoration(
         gradient: LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
         stops: [0.1, 0.4, 0.7, 0.9],
         colors: [
           Color(0xFFE0F7FA),
@@ -104,7 +104,7 @@ class ChoosePageState extends State<Choose> {
                           style: TextStyle(color: Colors.white),
                         ),
                         gradient: LinearGradient(
-                          colors: <Color>[Colors.red, Colors.black],
+                          colors: <Color>[Colors.grey[350], Colors.grey[700]],
                         ),
                         onPressed: (){
                           Navigator.push(context, MaterialPageRoute(builder:(BuildContext context) => LoginSeeker()));
@@ -122,7 +122,7 @@ class ChoosePageState extends State<Choose> {
                           style: TextStyle(color: Colors.white),
                         ),
                         gradient: LinearGradient(
-                          colors: <Color>[Colors.red, Colors.black],
+                          colors: <Color>[Colors.grey[350], Colors.grey[700]],
                         ),
                         onPressed: (){
                           Navigator.push(context, MaterialPageRoute(builder:(BuildContext context) => LoginProvider()));

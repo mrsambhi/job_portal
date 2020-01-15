@@ -206,7 +206,7 @@ class RegistrationProviderFormState extends State<RegistrationProvider> {
         "email": '${email.text}',
         "password": '${password.text}'
       };
-      apiRequest(Constants.SIGNUPPROVIDER_URL, map);
+      apiRequest(Constants.signUpProvider, map);
     }
   }
 

@@ -52,13 +52,14 @@ class LoginSeekerFormState extends State<LoginSeeker> {
 
         });
       }*/
-      print(err);
+      print('${err}');
+      id = data['id'].toString();
       print('RESPONCE_DATA : ' + status);
       CustomProgressLoader.cancelLoader(context);
 
       if (status == "1") {
-        prefs.setString(Constants.LOGIN_STATUS, "TRUE");
-        prefs.setString(Constants.USER_ID, id);
+        prefs.setString(Constants.loginStatus, "TRUE");
+        prefs.setString(Constants.userId, id);
         Navigator.pushReplacement(
             context,
             new MaterialPageRoute(
@@ -146,7 +147,7 @@ class LoginSeekerFormState extends State<LoginSeeker> {
     } else {
       Map map = {"email": '${em.text}',
         "password":'${pass.text}'};
-      apiRequest(Constants.LOGINPROVIDER_URL, map);
+      apiRequest(Constants.loginSeeker, map);
     }
   }
   void clickNavigation2(){
@@ -210,7 +211,7 @@ class LoginSeekerFormState extends State<LoginSeeker> {
                               passwordVisible
                                   ? Icons.visibility
                                   : Icons.visibility_off,
-                              color: Colors.green,
+                              color: Colors.black45,
                             ),
                             onPressed: () {
                               setState(() {

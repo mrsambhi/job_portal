@@ -1,10 +1,17 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:job_portal/screens/Comman/privacypolicy.dart';
 import 'package:job_portal/screens/Comman/t&c.dart';
+import 'package:job_portal/screens/Constantss.dart';
 import 'package:job_portal/screens/Provider/addjobs.dart';
 import 'package:job_portal/screens/Comman/contactus.dart';
 import 'package:job_portal/screens/Provider/help.dart';
 import 'package:job_portal/screens/Provider/profile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:job_portal/screens/choose.dart';
 class HomePageProvider extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -13,7 +20,110 @@ class HomePageProvider extends StatefulWidget {
 }
 
 class ListItemWidget extends State<HomePageProvider> {
+  var result;
+  SharedPreferences prefs;
+  void showContent() {
+    showDialog<Null>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return new AlertDialog(
+          title: new Text('Log out'),
+          content: new SingleChildScrollView(
+            child: new ListBody(
+              children: <Widget>[
+                new Text('Are you sure you want to log out?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            new FlatButton(
+              child: new Text('Log out'),
+              onPressed: _logoutClick,
+            ),
+          ],
+        );
+      },
+    );
+  }
+  List data;
+  var isLoader =false;
+  String reply = "";
 
+  Future<String> getData(String url ) async {
+    try {
+      setState(() {
+        isLoader=true;
+
+      });
+      //SharedPreferences prefs = await SharedPreferences.getInstance();
+      // CustomProgressLoader.showLoader(context);
+      //  var isConnect = await ConnectionDetector.isConnected();
+      // if (isConnect) {
+      HttpClient httpClient = new HttpClient();
+      HttpClientRequest request = await httpClient.getUrl(Uri.parse(url));
+      request.headers.set('content-type' , 'application/json');
+     // request.add(utf8.encode(json.encode(jsonMap)));
+      HttpClientResponse response = await request.close();
+      //you should check the response.statusCode
+      reply = await response.transform(utf8.decoder).join();
+      httpClient.close();
+      Map data = json.decode(reply);
+      result =  data['result'];
+      print('$result');
+      //String status = data['status'].toString();
+      //for (var d in data['result']) {
+
+    }
+
+    catch (e) {
+      setState(() {
+        isLoader=false;
+
+      });
+      // CustomProgressLoader.cancelLoader(context);
+      print(e);
+      Fluttertoast.showToast(
+          msg: e.toString(),
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      return reply;
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _incrementCounter();
+    this.getData(Constants.viewJobs);
+  }
+  void _logoutClick() {
+    setState(() {
+
+      prefs.setString(Constants.loginStatus,"FALSE");
+    });
+    /*Navigator.pushReplacement(
+        context,
+        new MaterialPageRoute(
+            builder: (BuildContext context) => Choose()));*/
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+        Choose()), (Route<dynamic> route) => false);
+
+  }
+  _incrementCounter() async {
+    prefs = await SharedPreferences.getInstance();
+  }
   showMenu() {
     showModalBottomSheet(
         context: context,
@@ -128,7 +238,7 @@ class ListItemWidget extends State<HomePageProvider> {
                                       Icons.exit_to_app,
                                       color: Colors.white,
                                     ),
-                                    onTap: () {},
+                                    onTap: showContent,
                                   ),
                                 ],
                               ),
@@ -160,7 +270,7 @@ class ListItemWidget extends State<HomePageProvider> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.cyan[600],
         onPressed: () {
-          Navigator.push(context,MaterialPageRoute(builder: (context) => MyApp()));
+          Navigator.push(context,MaterialPageRoute(builder: (context) => AddJobsForm()));
         },
 
         tooltip: 'Increment',
@@ -190,11 +300,11 @@ class ListItemWidget extends State<HomePageProvider> {
       ),
 
       body: Container(
-        child: ListView.builder(
-
-          itemCount: items.length,
-          itemBuilder: (context, index) {
-            return Card(
+        child:
+        ListView.builder(
+          itemCount: result == null ? 0 : result.length,
+          itemBuilder: (BuildContext context, int index) {
+            return new  Card(
               elevation: 5,
               child: Container(
                 height: 150.0,
@@ -267,7 +377,13 @@ class ListItemWidget extends State<HomePageProvider> {
               ),
             );
           },
-        ),
+        ), /*ListView.builder(
+
+          itemCount: items.length,
+          itemBuilder: (context, index) {
+            return
+          },
+        ),*/
       ),
     );
   }

@@ -50,7 +50,8 @@ class JobDetails extends StatelessWidget {
                             child: const Text('Apply',style:TextStyle(color: Colors.black)),
                           )
                         ]
-                    ),]
+                    ),
+                  ]
               ),
             ),
           ),

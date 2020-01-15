@@ -203,7 +203,7 @@ Future validation() async {
       "password": '${password.text}',
       "qualification": '${qualification.text}'
     };
-    apiRequest(Constants.SIGNUPSEEKER_URL, map);
+    apiRequest(Constants.signUpSeeker, map);
   }
 }
 

@@ -70,7 +70,7 @@ class SplashScreenState extends State<SplashScreen> {
   _incrementCounter() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      loginStatus = prefs.getString(Constants.LOGIN_STATUS);
+      loginStatus = prefs.getString(Constants.loginStatus);
     });
     if (loginStatus=="TRUE"){
       Timer(Duration(seconds: 2),()=> Navigator.of(context).pushReplacement(MaterialPageRoute(
