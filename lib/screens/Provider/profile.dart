@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:job_portal/screens/Constantss.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
@@ -23,6 +24,14 @@ class MyProfile extends StatefulWidget {
 // Create a corresponding State class.
 // This class holds data related to the form.
 class MyProfileState extends State<MyProfile> {
+  File _image;
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+
+    setState(() {
+      _image = image;
+    });
+  }
   var isLoader =false;
   String id;
   String reply = "";

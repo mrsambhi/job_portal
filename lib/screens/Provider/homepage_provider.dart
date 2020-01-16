@@ -78,8 +78,13 @@ class ListItemWidget extends State<HomePageProvider> {
       Map data = json.decode(reply);
       result =  data['result'];
       print('$result');
-      //String status = data['status'].toString();
-      //for (var d in data['result']) {
+      if(result!=null){
+        print(result);
+        setState(() {
+          isLoader=false;
+        });
+      }
+
 
     }
 
@@ -285,7 +290,10 @@ class ListItemWidget extends State<HomePageProvider> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             IconButton(icon: Icon(Icons.home),
-              onPressed: () {},),
+              onPressed: () {
+                Navigator.push(context,MaterialPageRoute(builder: (context) => HomePageProvider()));
+
+              },),
             IconButton(icon: Icon(Icons.filter_frames),
               onPressed: () {},),
             IconButton(icon: Icon(Icons.person),
@@ -302,7 +310,8 @@ class ListItemWidget extends State<HomePageProvider> {
 
       body: Container(
         child:
-        ListView.builder(
+        isLoader?Center(child: CircularProgressIndicator(),):ListView.builder(
+
           itemCount: result == null ? 0 : result.length,
           itemBuilder: (BuildContext context, int index) {
             return new  Card(

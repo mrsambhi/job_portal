@@ -463,7 +463,6 @@ class AddJobsFormState extends State<AddJobsForm>  {
                                               border:OutlineInputBorder(
                                                   borderRadius:BorderRadius.circular(5.0))
                                           ),
-                                          keyboardType:TextInputType.number,
                                           onChanged:(String string){
                                             setState((){});}),
                                     ),
