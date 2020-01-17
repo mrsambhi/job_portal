@@ -1,11 +1,16 @@
-/*import 'package:drawer_demo/fragments/first_fragment.dart';
-import 'package:drawer_demo/fragments/second_fragment.dart';*/
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:job_portal/screens/seekers/jobs.dart';
 import 'package:job_portal/screens/seekers/more.dart';
 import 'package:job_portal/screens/seekers/myapplication.dart';
 import 'package:job_portal/screens/seekers/preferences.dart';
 import 'package:job_portal/screens/seekers/resume.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../Constantss.dart';
 
 class DrawerItem {
   String title;
@@ -18,7 +23,7 @@ class HomePage extends StatefulWidget {
     new DrawerItem("Jobs", Icons.home),
     new DrawerItem("My Preferences", Icons.playlist_add_check),
     new DrawerItem("My Application", Icons.check_circle),
-    new DrawerItem("Resume", Icons.insert_drive_file),
+    new DrawerItem("Upload Resume", Icons.insert_drive_file),
     new DrawerItem("More", Icons.more)
 
   ];
@@ -30,14 +35,94 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  int _selectedDrawerIndex = 0;
+  var isLoader =false;
+  String id;
+  String reply = "";
+  String name;
+  String email;
+  String mobile;
+  SharedPreferences prefs;
+  Future<String> apiRequest(String url , Map jsonMap) async {
+    try {
+      setState(() {
+        isLoader=true;
+      });
+      HttpClient httpClient = new HttpClient();
+      HttpClientRequest request = await httpClient.postUrl(Uri.parse(url));
+      request.headers.set('content-type' , 'application/json');
+      request.add(utf8.encode(json.encode(jsonMap)));
+      HttpClientResponse response = await request.close();
+      //you should check the response.statusCode
+      reply = await response.transform(utf8.decoder).join();
+      httpClient.close();
+      Map data = json.decode(reply);
+      var result =  data['result'];
+      print(' $result');
+      //String status = data['status'].toString();
+      //for (var d in data['result']) {
+      if (result != null) {
+        setState(() {
+          name = result['name'];
+          mobile=result['mobile'];
+          email=result['email'];
+          isLoader=false;
+        }
+        );
 
+      }
+      else {
+        setState(() {
+          isLoader=false;
+
+        }
+        );
+
+      }
+    }
+
+    catch (e) {
+      setState(() {
+        isLoader=false;
+
+      });
+      print(e);
+      Fluttertoast.showToast(
+          msg: e.toString(),
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      return reply;
+    }
+  }
+  _incrementCounter() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      id=prefs.getString(Constants.userId);
+      print('$id');
+      Map map={"id": id} ;
+      apiRequest(Constants.seekerProfile, map);
+    });
+  }
+
+
+  @override
+  void initState() {
+
+    super.initState();
+    _incrementCounter();
+
+  }
+
+  int _selectedDrawerIndex = 0;
   _getDrawerItemWidget(int pos) {
     switch (pos) {
       case 0:
         return new MyApp();
       case 1:
-        return new Preferences();
+        return new MyPreferences();
       case 2:
         return new MyApplications();
       case 3:
@@ -98,10 +183,11 @@ class HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-                accountName: new Text("Vani Swarnkar"),
-                accountEmail: new Text('swarnvani306@gmail.com'),
+                accountName: new Text("$name",style: TextStyle(color: Colors.black),),
+                accountEmail: new Text('$email',style: TextStyle(color: Colors.black),),
+
               currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage('assets/vani.jfif'),
+
 
                 ),
               ),

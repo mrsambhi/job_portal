@@ -5,12 +5,14 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:job_portal/screens/Comman/privacypolicy.dart';
+import 'package:job_portal/screens/Comman/resetpage.dart';
 import 'package:job_portal/screens/Comman/t&c.dart';
 import 'package:job_portal/screens/Constantss.dart';
 import 'package:job_portal/screens/Provider/addjobs.dart';
 import 'package:job_portal/screens/Comman/contactus.dart';
 import 'package:job_portal/screens/Provider/help.dart';
 import 'package:job_portal/screens/Provider/profile.dart';
+import 'package:job_portal/screens/Provider/tables.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:job_portal/screens/choose.dart';
 class HomePageProvider extends StatefulWidget {
@@ -53,11 +55,11 @@ class ListItemWidget extends State<HomePageProvider> {
       },
     );
   }
-  List data;
   var isLoader =false;
   String reply = "";
+  String id;
 
-  Future<String> getData(String url ) async {
+  Future<String> getData(String url,jsonMap ) async {
     try {
       setState(() {
         isLoader=true;
@@ -68,18 +70,17 @@ class ListItemWidget extends State<HomePageProvider> {
       //  var isConnect = await ConnectionDetector.isConnected();
       // if (isConnect) {
       HttpClient httpClient = new HttpClient();
-      HttpClientRequest request = await httpClient.getUrl(Uri.parse(url));
+      HttpClientRequest request = await httpClient.postUrl(Uri.parse(url));
       request.headers.set('content-type' , 'application/json');
-     // request.add(utf8.encode(json.encode(jsonMap)));
+      request.add(utf8.encode(json.encode(jsonMap)));
       HttpClientResponse response = await request.close();
       //you should check the response.statusCode
       reply = await response.transform(utf8.decoder).join();
       httpClient.close();
       Map data = json.decode(reply);
-      result =  data['result'];
-      print('$result');
+      var result1 =  data['result'];
+      result = result1['data'];
       if(result!=null){
-        print(result);
         setState(() {
           isLoader=false;
         });
@@ -112,7 +113,7 @@ class ListItemWidget extends State<HomePageProvider> {
     // TODO: implement initState
     super.initState();
     _incrementCounter();
-    this.getData(Constants.viewJobs);
+
   }
   void _logoutClick() {
     setState(() {
@@ -129,7 +130,12 @@ class ListItemWidget extends State<HomePageProvider> {
   }
   _incrementCounter() async {
     prefs = await SharedPreferences.getInstance();
-  }
+    setState(() {
+      id=prefs.getString(Constants.userId);
+      Map map={"id": id} ;
+      this.getData(Constants.providerProfile,map);
+  });}
+
   showMenu() {
     showModalBottomSheet(
         context: context,
@@ -201,7 +207,7 @@ class ListItemWidget extends State<HomePageProvider> {
                                       style: TextStyle(color: Colors.white),
                                     ),
                                     leading: Icon(
-                                      Icons.copyright,
+                                      Icons.info_outline,
                                       color: Colors.white,
                                     ),
                                     onTap: () {
@@ -214,7 +220,7 @@ class ListItemWidget extends State<HomePageProvider> {
                                       style: TextStyle(color: Colors.white),
                                     ),
                                     leading: Icon(
-                                      Icons.lock_outline,
+                                      Icons.copyright,
                                       color: Colors.white,
                                     ),
                                     onTap: () {
@@ -224,11 +230,24 @@ class ListItemWidget extends State<HomePageProvider> {
                                   ),
                                   ListTile(
                                     title: Text(
+                                      "Reset Password",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    leading: Icon(
+                                      Icons.lock_outline,
+                                      color: Colors.white,
+                                    ),
+                                    onTap: () {
+                                      Navigator.push(context,MaterialPageRoute(builder: (context) =>ResetPage ()));
+                                    },
+                                  ),
+                                  ListTile(
+                                    title: Text(
                                       "Contact Us",
                                       style: TextStyle(color: Colors.white),
                                     ),
                                     leading: Icon(
-                                      Icons.info_outline,
+                                      Icons.phone,
                                       color: Colors.white,
                                     ),
                                     onTap: () {
@@ -241,7 +260,7 @@ class ListItemWidget extends State<HomePageProvider> {
                                       style: TextStyle(color: Colors.white),
                                     ),
                                     leading: Icon(
-                                      Icons.exit_to_app,
+                                      Icons.power_settings_new,
                                       color: Colors.white,
                                     ),
                                     onTap: showContent,
@@ -295,7 +314,9 @@ class ListItemWidget extends State<HomePageProvider> {
 
               },),
             IconButton(icon: Icon(Icons.filter_frames),
-              onPressed: () {},),
+              onPressed: () {
+                Navigator.push(context,MaterialPageRoute(builder: (context) => Tables()));
+              },),
             IconButton(icon: Icon(Icons.person),
               onPressed: () {
                 Navigator.push(context,MaterialPageRoute(builder: (context) => MyProfile()));
@@ -303,7 +324,8 @@ class ListItemWidget extends State<HomePageProvider> {
             IconButton(icon: Icon(Icons.settings),
               onPressed: () {
               showMenu();
-              },),
+              },
+            ),
           ],
         ),
       ),
@@ -315,86 +337,81 @@ class ListItemWidget extends State<HomePageProvider> {
           itemCount: result == null ? 0 : result.length,
           itemBuilder: (BuildContext context, int index) {
             return new  Card(
-              elevation: 5,
+              elevation: 10,
               child: Container(
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Container(
-                        child: Padding(
-                          padding: EdgeInsets.fromLTRB(10, 2, 0, 0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                child: Column(
-                                    children:<Widget>[
-                                      Text("Job Title:   ${result[index]["Job Title"]}",style: TextStyle(
-                                        fontSize: 20,
-                                        color: Colors.black,
-                                      ),
-                                      textAlign: TextAlign.start,),
-                                      Text("Place:   ${result[index]["Location"]}",style: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.black,
-                                      ),
-                                        textAlign: TextAlign.start,
-                                      ),
-                                      Text("Category:   ${result[index]["Category"]}",style: TextStyle(
-                                        fontSize:15,
-                                        color: Colors.black,
-                                      ),
-                                        textAlign: TextAlign.start,),
-                                      Text("Status:   ${result[index]["Status"]}",style: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.black,
-                                      ),
-                                        textAlign: TextAlign.start,),
-                                      Text("Skills Required:   ${result[index]["Skills required"]}",style: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.black,
-                                      ),
-                                        textAlign: TextAlign.start,),
-
-                                    ]
-                                ),
-                              ),
-                              Divider(
-                                  color: Colors.black
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(bottom:5.0),
-                                child: Align(
-                                    alignment: Alignment.bottomRight,
-                                    child:
-                                    Padding(
-                                      padding: const EdgeInsets.only(right: 8.0),
-                                      child: FlatButton(
-                                        color: Colors.cyan,
-                                        textColor: Colors.white,
-                                        disabledColor: Colors.grey,
-                                        disabledTextColor: Colors.black,
-                                        splashColor: Colors.cyanAccent,
-                                        onPressed: () {
-
-                                        },
-                                        child: Text(
-                                          "View Applicants",
-                                          style: TextStyle(fontSize: 10.0),
-                                        ),
-                                      ),
-                                    )
-                                ),
-                              )
-                            ],
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top:8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text("${result[index]["Job Title"]}",style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.cyan[600],
+                        ),
+                          textAlign: TextAlign.left,),
+                        Padding(
+                          padding: const EdgeInsets.only(top:8.0),
+                          child: Text("Place                  :${result[index]["Location"]}",style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.black,
+                          ),
+                            textAlign: TextAlign.left,
                           ),
                         ),
-                      ),
-                    )
-                  ],
+                        Text("Category            :${result[index]["Category"]}",style: TextStyle(
+                          fontSize:15,
+                          color: Colors.black,
+                        ),
+                          textAlign: TextAlign.left,),
+                        Text("Status                 :${result[index]["Status"]}",style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.black,
+                        ),
+                          textAlign: TextAlign.left,),
+                        Text("Skills Required  :${result[index]["Skills required"]}",style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.black,
+                        ),
+                          textAlign: TextAlign.left,),
+                        Text("Apply By  :${result[index]["Last date to apply"]}",style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.black,
+                        ),
+                          textAlign: TextAlign.left,),
+                        Divider( thickness: .9,
+                            color: Colors.black
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(bottom:5.0),
+                          child: Align(
+                              alignment: Alignment.bottomRight,
+                              child:
+                              Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: FlatButton(
+                                  color: Colors.cyan,
+                                  textColor: Colors.white,
+                                  disabledColor: Colors.grey,
+                                  disabledTextColor: Colors.black,
+                                  splashColor: Colors.cyanAccent,
+                                  onPressed: () {
+
+                                  },
+                                  child: Text(
+                                    "View Applicants",
+                                    style: TextStyle(fontSize: 10.0),
+                                  ),
+                                ),
+                              )
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 ),
+
               ),
             );
           },

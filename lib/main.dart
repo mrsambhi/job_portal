@@ -7,6 +7,7 @@ import 'package:job_portal/screens/Constantss.dart';
 import 'package:job_portal/screens/Provider/homepage_provider.dart';
 //import 'package:job_portal/screens/login.dart';
 import 'package:job_portal/screens/onboarding.dart';
+import 'package:job_portal/screens/seekers/homepage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:splashscreen/splashscreen.dart';
 /*
@@ -61,24 +62,36 @@ class SplashScreen extends StatefulWidget {
 class SplashScreenState extends State<SplashScreen> {
 
   String loginStatus="FALSE";
-
+  String loginType="Seeker";
   void initState(){
     super.initState();
     _incrementCounter();
 
     }
   _incrementCounter() async {
+    var _duration = new Duration(seconds: 2);
+    return new Timer( _duration,navigationPage);
+  }
+  Future navigationPage() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       loginStatus = prefs.getString(Constants.loginStatus);
+      loginType = prefs.getString(Constants.loginType);
     });
-    if (loginStatus=="TRUE"){
-      Timer(Duration(seconds: 2),()=> Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (BuildContext context) => HomePageProvider())));
-    }else{
+   if (loginStatus=="TRUE"){
+      if(loginType=="Provider"){
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (BuildContext context) => HomePageProvider()));}
+      else if(loginType=="Seeker"){
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) => HomePage()));}
+
+    }
+    else {
       Timer(Duration(seconds: 2),()=> Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (BuildContext context) => OnBoarding())));
     }
+
   }
     @override
     Widget build(BuildContext context) {
@@ -109,7 +122,7 @@ class SplashScreenState extends State<SplashScreen> {
                     Padding(padding: EdgeInsets.only(top: 10.0),
                     ),
                     Text(
-                      "Job Portal",
+                      "Job Shop",
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 24.0,

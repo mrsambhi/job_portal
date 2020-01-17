@@ -7,33 +7,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:job_portal/screens/Constantss.dart';
 import 'dart:async';
-
 import 'package:job_portal/screens/CustomProgressLoader.dart';
-
-/*class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false ,
-      home: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: true ,
-          backgroundColor: Colors.cyan[600] ,
-          title: Text("Add a Job") ,
-          centerTitle: true ,
-          leading: IconButton(icon: Icon(Icons.arrow_back) ,
-            onPressed: () => Navigator.pop(context , false) ,
-          ) ,) ,
-        body: SingleChildScrollView(
-          child: MyCustomForm() ,
-        ) ,
-
-      ) ,
-    );
-  }
-}*/
-
-
+import 'package:shared_preferences/shared_preferences.dart';
 // Create a Form widget.
 class AddJobsForm extends StatefulWidget {
   @override
@@ -45,6 +20,8 @@ class AddJobsForm extends StatefulWidget {
 // Create a corresponding State class.
 // This class holds data related to the form.
 class AddJobsFormState extends State<AddJobsForm>  {
+  SharedPreferences prefs;
+  String id;
   TextEditingController jobTitle = new TextEditingController();
   TextEditingController category = new TextEditingController();
   TextEditingController company = new TextEditingController();
@@ -72,7 +49,7 @@ class AddJobsFormState extends State<AddJobsForm>  {
       httpClient.close();
       Map data = json.decode(reply);
       String status = data['status'].toString();
-
+      print(Constants.userId);
       print('RESPONCE_DATA : ' + status);
 
       CustomProgressLoader.cancelLoader(context);
@@ -112,7 +89,21 @@ class AddJobsFormState extends State<AddJobsForm>  {
           fontSize: 16.0);
     }
   }
+  _incrementCounter() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      id=prefs.getString(Constants.userId);
+      print('$id');
 
+    });
+  }
+  @override
+  void initState() {
+
+    super.initState();
+    _incrementCounter();
+
+  }
   Future validation() async {
 
     if (jobTitle.text.isEmpty) {
@@ -128,6 +119,15 @@ class AddJobsFormState extends State<AddJobsForm>  {
     else if (salary.text.isEmpty) {
       Fluttertoast.showToast(
           msg: "Please enter the Salary!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.grey,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }else if (company.text.isEmpty) {
+      Fluttertoast.showToast(
+          msg: "Please enter the Company Name!",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIos: 1,
@@ -203,7 +203,9 @@ class AddJobsFormState extends State<AddJobsForm>  {
         "Skills required": '${skillsRequired.text}',
         "Location": '${location.text}',
         "Status": '${status.text}',
-        "Last date to apply": '${last.text}'
+        "Last date to apply": '${last.text}',
+        "employer_id": '${'$id'}'
+
       };
       apiRequest(Constants.addJobs, map);
     }
@@ -383,6 +385,23 @@ class AddJobsFormState extends State<AddJobsForm>  {
                                         bottom: 5.0,
                                       ),
                                       child: TextField(
+                                        controller: company,
+                                          decoration:InputDecoration(
+                                              labelText:'Company Name',
+                                              hintText:'eg-Ziasy Technologies',
+                                              labelStyle:textStyle,
+                                              border:OutlineInputBorder(
+                                                  borderRadius:BorderRadius.circular(5.0))
+                                          ),
+                                          keyboardType:TextInputType.text,
+                                          onChanged:(String string){
+                                            setState((){});}),
+                                    ),Padding(
+                                      padding: const EdgeInsets.only(
+                                        top:5.0,
+                                        bottom: 5.0,
+                                      ),
+                                      child: TextField(
                                         controller: workingHours,
                                           decoration:InputDecoration(
                                               labelText:'Work hour',
@@ -391,7 +410,7 @@ class AddJobsFormState extends State<AddJobsForm>  {
                                               border:OutlineInputBorder(
                                                   borderRadius:BorderRadius.circular(5.0))
                                           ),
-                                          keyboardType:TextInputType.number,
+                                          keyboardType:TextInputType.text,
                                           onChanged:(String string){
                                             setState((){});}),
                                     ),
@@ -409,7 +428,7 @@ class AddJobsFormState extends State<AddJobsForm>  {
                                               border:OutlineInputBorder(
                                                   borderRadius:BorderRadius.circular(5.0))
                                           ),
-                                          keyboardType:TextInputType.number,
+                                          keyboardType:TextInputType.text,
                                           onChanged:(String string){
                                             setState((){});}),
                                     ),
@@ -427,7 +446,7 @@ class AddJobsFormState extends State<AddJobsForm>  {
                                               border:OutlineInputBorder(
                                                   borderRadius:BorderRadius.circular(5.0))
                                           ),
-                                          keyboardType:TextInputType.number,
+                                          keyboardType:TextInputType.text,
                                           onChanged:(String string){
                                             setState((){});}),
                                     ),
@@ -445,7 +464,7 @@ class AddJobsFormState extends State<AddJobsForm>  {
                                               border:OutlineInputBorder(
                                                   borderRadius:BorderRadius.circular(5.0))
                                           ),
-                                          keyboardType:TextInputType.number,
+                                          keyboardType:TextInputType.text,
                                           onChanged:(String string){
                                             setState((){});}),
                                     ),Padding(

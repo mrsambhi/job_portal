@@ -107,7 +107,7 @@ class ChoosePageState extends State<Choose> {
                           colors: <Color>[Colors.grey[350], Colors.grey[700]],
                         ),
                         onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder:(BuildContext context) => LoginSeeker()));
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder:(BuildContext context) => LoginSeeker()));
 
                         }
                     ),
@@ -125,7 +125,7 @@ class ChoosePageState extends State<Choose> {
                           colors: <Color>[Colors.grey[350], Colors.grey[700]],
                         ),
                         onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder:(BuildContext context) => LoginProvider()));
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder:(BuildContext context) => LoginProvider()));
 
 
                         }

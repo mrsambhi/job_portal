@@ -6,8 +6,9 @@ import 'package:job_portal/screens/Constantss.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 import 'dart:convert';
-
 import '../Constantss.dart';
+
+
 bool _isEnabled = false;
 bool _canShowButton = false;
 bool _canShow= true;
@@ -24,6 +25,35 @@ class MyProfile extends StatefulWidget {
 // Create a corresponding State class.
 // This class holds data related to the form.
 class MyProfileState extends State<MyProfile> {
+File _pickedImage;
+
+  void _pickImage() async {
+    final imageSource = await showDialog<ImageSource>(
+        context: context,
+        builder: (context) =>
+            AlertDialog(
+              title: Text("Select the image source"),
+              actions: <Widget>[
+                MaterialButton(
+                  child: Text("Camera"),
+                  onPressed: () => Navigator.pop(context, ImageSource.camera),
+                ),
+                MaterialButton(
+                  child: Text("Gallery"),
+                  onPressed: () => Navigator.pop(context, ImageSource.gallery),
+                )
+              ],
+            )
+    );
+
+    if(imageSource != null) {
+      final file = await ImagePicker.pickImage(source: imageSource);
+      if(file != null) {
+        setState(() => _pickedImage = file);
+      }
+    }
+  }
+
   File _image;
   Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
@@ -53,8 +83,9 @@ class MyProfileState extends State<MyProfile> {
       reply = await response.transform(utf8.decoder).join();
       httpClient.close();
       Map data = json.decode(reply);
-      var result =  data['result'];
-      print('dadadad $result');
+      var result1 =  data['result'];
+      var result = result1['prodata'];
+      print(' $result');
       //String status = data['status'].toString();
       //for (var d in data['result']) {
       if (result != null) {
@@ -183,24 +214,39 @@ class MyProfileState extends State<MyProfile> {
 
                             Padding(
                               padding: const EdgeInsets.only(left:50.0),
-                              child: Container(
-                                  width: 170.0,
-                                  height: 170.0,
-                                  decoration: new BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: new DecorationImage(
-                                        fit: BoxFit.fill,
-                                        image: AssetImage("assets/rose.jpg"),
-                                      )
-                                  )
-                              ),
+                              child:
+                                _pickedImage == null ?
+                                Container(
+                                    width: 170.0,
+                                    height: 170.0,
+                                    decoration: new BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: new DecorationImage(
+                                          fit: BoxFit.fill,
+                                          image: AssetImage("assets/rose.jpg"),
+                                        )
+                                    )
+                                ):
+                                Container(
+                                    width: 170.0,
+                                    height: 170.0,
+                                    decoration: new BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: new DecorationImage(
+                                          fit: BoxFit.fill,
+                                          image: FileImage(_pickedImage),
+                                        )
+                                    )
+                                )
+                               // Image(image: FileImage(_pickedImage))
                             ),
                             _showCamera
                                 ? IconButton(
                               icon:Icon(Icons.photo_camera),
-                              /*onPressed: () {
-                                tapping();
-                              },*/
+                              onPressed: (){
+                                _pickImage();
+                              },
+
                             ):SizedBox(),
                           ]
                       ),

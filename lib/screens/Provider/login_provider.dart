@@ -53,13 +53,14 @@ class LoginProviderFormState extends State<LoginProvider> {
         });
       }*/
       id = data['id'].toString();
-      print('${id}');
-      print('${err}');
+      print('$id');
+      print('$err');
       print('RESPONCE_DATA : ' + status);
       CustomProgressLoader.cancelLoader(context);
 
       if (status == "1") {
         prefs.setString(Constants.loginStatus, "TRUE");
+        prefs.setString(Constants.loginType, "Provider");
         prefs.setString(Constants.userId, id);
         Navigator.pushReplacement(
             context,

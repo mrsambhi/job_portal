@@ -10,11 +10,14 @@ class Constants{
   static final String providerUpdateProfile = BaseUrl+"/reg_employer/edit";
   static final String addJobs = BaseUrl+"/jobs/addjob";
   static final String viewJobs = BaseUrl+"/jobs/view";
+  static final String viewJobDetails = BaseUrl+"/jobs/view_job_details";
 
 
   // SESSION PARAMETER
 
   static final String loginStatus="LOGIN_STATUS";
+  static final String loginType="LOGIN_TYPE";
   static final String userId="USER_ID";
+  static final String jobId="JOB_ID";
 
 }

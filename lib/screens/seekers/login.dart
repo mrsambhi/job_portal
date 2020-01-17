@@ -7,6 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:job_portal/screens/Constantss.dart';
 import 'package:job_portal/screens/CustomProgressLoader.dart';
 import 'package:job_portal/screens/seekers/homepage.dart';
+import 'package:job_portal/screens/seekers/jobs.dart';
 import 'dart:convert';
 import 'package:job_portal/screens/seekers/registration.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -52,13 +53,14 @@ class LoginSeekerFormState extends State<LoginSeeker> {
 
         });
       }*/
-      print('${err}');
+      print('$err');
       id = data['id'].toString();
       print('RESPONCE_DATA : ' + status);
       CustomProgressLoader.cancelLoader(context);
 
       if (status == "1") {
         prefs.setString(Constants.loginStatus, "TRUE");
+        prefs.setString(Constants.loginType, "Seeker");
         prefs.setString(Constants.userId, id);
         Navigator.pushReplacement(
             context,
