@@ -98,7 +98,6 @@ class ListItemWidget extends State<SwipeList> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     this.getData(Constants.viewJobs);
     _incrementCounter();
@@ -215,7 +214,6 @@ class ListItemWidget extends State<SwipeList> {
                       ),
                     ),
                   ),
-
                   ),
               );
             },
@@ -223,5 +221,4 @@ class ListItemWidget extends State<SwipeList> {
       ),
     );
   }
-
 }

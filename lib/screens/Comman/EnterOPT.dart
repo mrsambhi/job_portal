@@ -17,7 +17,7 @@ class EnterOtpState extends State<EnterOtp> {
   String _otp = "";
   String reply="";
   String email="";
-  var _otpSymbols = ["\u{25CB}","\u{25CB}","\u{25CB}","\u{25CB}"];
+  var _otpSymbols = ["\u{25CB}","\u{25CB}","\u{25CB}","\u{25CB}","\u{25CB}"];
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   SharedPreferences prefs;
 
@@ -36,9 +36,7 @@ class EnterOtpState extends State<EnterOtp> {
       httpClient.close();
       Map data = json.decode(reply);
       String status = data['status'].toString();
-      String err = data['err'].toString();
 
-      print('$err');
 
       print('RESPONCE_DATA : ' + status);
       CustomProgressLoader.cancelLoader(context);
@@ -116,16 +114,18 @@ class EnterOtpState extends State<EnterOtp> {
   _incrementCounter() async
   {
     prefs = await SharedPreferences.getInstance();
-    setState(() {
-      email=prefs.getString(Constants.userId);
-      map={
-        "email": email,
-        "otp":_otp.toString()
-      } ;
-    });
+
   }
    onclick(){
-
+     setState(() {
+       email=prefs.getString(Constants.email
+       );
+       print("$email");
+       map={
+         "email": email,
+         "otp":_otp
+       } ;
+     });
      apiRequest(Constants.checkOtp, map);
   }
 
@@ -202,7 +202,7 @@ class EnterOtpState extends State<EnterOtp> {
                     style: TextStyle(fontSize: 50, fontWeight: FontWeight.w200),
                   ),
                   Text(
-                    _otpSymbols[3],
+                    _otpSymbols[4],
                     style: TextStyle(fontSize: 50, fontWeight: FontWeight.w200),
                   )
                 ],

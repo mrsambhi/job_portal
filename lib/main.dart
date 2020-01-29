@@ -122,7 +122,7 @@ class SplashScreenState extends State<SplashScreen> {
                     Padding(padding: EdgeInsets.only(top: 10.0),
                     ),
                     Text(
-                      "Job Shop",
+                      "JOB-SHOP",
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 24.0,

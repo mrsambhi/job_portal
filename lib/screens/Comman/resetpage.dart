@@ -6,8 +6,8 @@ class ResetPage extends StatefulWidget {
 }
 
 class ResetPageState extends State<ResetPage> {
-  TextEditingController passwordEditingController = TextEditingController();
-  TextEditingController newPasswordEditingController = TextEditingController();
+  TextEditingController password = TextEditingController();
+  TextEditingController confirmPassword = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -25,16 +25,14 @@ class ResetPageState extends State<ResetPage> {
             child: Center(
               child: Column(
                 children: <Widget>[
-                  SizedBox(
-                    height: 80,
-                  ),
+
                   TextField(
                     autofocus: false,
                     obscureText: false,
                     keyboardType: TextInputType.visiblePassword,
-                    controller: passwordEditingController,
+                    controller: password,
                     decoration: InputDecoration(
-                        labelText: "Current Password",
+                        labelText: "New Password",
                         labelStyle: TextStyle(
                           color: Colors.black,
                           fontSize: 16,
@@ -53,9 +51,9 @@ class ResetPageState extends State<ResetPage> {
                     autofocus: false,
                     obscureText: true,
                     keyboardType: TextInputType.text,
-                    controller: newPasswordEditingController,
+                    controller: confirmPassword,
                     decoration: InputDecoration(
-                        labelText: "New Password",
+                        labelText: "Confirm Password",
 
                         labelStyle: TextStyle(
                           color: Colors.black,

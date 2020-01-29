@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'dart:async';
+import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:job_portal/screens/Comman/enteremail.dart';
 import 'package:job_portal/screens/Constantss.dart';
 import 'package:job_portal/screens/CustomProgressLoader.dart';
 import 'package:job_portal/screens/seekers/homepage.dart';
@@ -154,6 +156,8 @@ class LoginSeekerFormState extends State<LoginSeeker> {
   }
   void clickNavigation2(){
     Navigator.push(context,MaterialPageRoute(builder: (context) => Registration()));
+  } void clickNavigation3(){
+    Navigator.push(context,MaterialPageRoute(builder: (context) => EnterEmail()));
   }
 
 
@@ -165,10 +169,13 @@ class LoginSeekerFormState extends State<LoginSeeker> {
       decoration: BoxDecoration(
         image: DecorationImage(
           image: AssetImage("assets/1.jpg"),
-          fit: BoxFit.fill,
+        fit: BoxFit.fill,
         ),
+
       ),
+
       child:new Column(
+        //mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(top:80 ,),
@@ -286,31 +293,45 @@ class LoginSeekerFormState extends State<LoginSeeker> {
               ),
               ),
             ),
+            Column(
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () {
+                    clickNavigation3();
+                  },
+                  child: Text("Forgot Password?",
+                      style: TextStyle(
+                          color: Color(0xFF5d74e3),
+                          fontSize: 15.0,
+                          fontFamily: "Poppins-Bold")),
+                ),
+              ],
+            ),
             Padding(
-              padding: const EdgeInsets.only(top:60, bottom:35,),
-
-              child: Column(verticalDirection: VerticalDirection.down,
-                //crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    "New User? ",
-                    style: TextStyle(fontFamily: "Poppins-Medium",
-                      fontSize: 15.0,
+              padding: const EdgeInsets.fromLTRB(0.0,110.0,0.0,20.0),
+              child: Column(
+                  //crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      "New User? ",
+                      style: TextStyle(fontFamily: "Poppins-Medium",
+                        fontSize: 15.0,
+                      ),
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      clickNavigation2();
-                    },
-                    child: Text("SignUp",
-                        style: TextStyle(
-                            color: Color(0xFF5d74e3),
-                            fontSize: 15.0,
-                            fontFamily: "Poppins-Bold")),
-                  ),
-                ],
-              ),
-            )
+                    GestureDetector(
+                      onTap: () {
+                        clickNavigation2();
+                      },
+                      child: Text("SignUp",
+                          style: TextStyle(
+                              color: Color(0xFF5d74e3),
+                              fontSize: 15.0,
+                              fontFamily: "Poppins-Bold")),
+                    ),
+                  ],
+                ),
+            ),
+
           ]
       ),
     ),

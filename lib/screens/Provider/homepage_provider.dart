@@ -13,6 +13,7 @@ import 'package:job_portal/screens/Comman/contactus.dart';
 import 'package:job_portal/screens/Provider/help.dart';
 import 'package:job_portal/screens/Provider/profile.dart';
 import 'package:job_portal/screens/Provider/tables.dart';
+import 'package:job_portal/screens/Provider/viewApplicants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:job_portal/screens/choose.dart';
 class HomePageProvider extends StatefulWidget {
@@ -396,8 +397,12 @@ class ListItemWidget extends State<HomePageProvider> {
                                   disabledColor: Colors.grey,
                                   disabledTextColor: Colors.black,
                                   splashColor: Colors.cyanAccent,
-                                  onPressed: () {
+                                  onPressed: () {setState(() {
+                                    id= result[index]["_id"];
 
+                                  });
+                                  prefs.setString(Constants.jobId, id);
+                                    Navigator.push(context,MaterialPageRoute(builder: (context) => ViewApplicants()));
                                   },
                                   child: Text(
                                     "View Applicants",

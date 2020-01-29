@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:job_portal/screens/Comman/enteremail.dart';
 import 'package:job_portal/screens/Constantss.dart';
 import 'package:job_portal/screens/CustomProgressLoader.dart';
 import 'package:job_portal/screens/Provider/homepage_provider.dart';
@@ -154,6 +155,8 @@ class LoginProviderFormState extends State<LoginProvider> {
   }
  void clickNavigation2(){
     Navigator.push(context,MaterialPageRoute(builder: (context) => RegistrationProvider()));
+  } void clickNavigation3(){
+    Navigator.push(context,MaterialPageRoute(builder: (context) => EnterEmail()));
   }
 
 
@@ -286,10 +289,23 @@ class LoginProviderFormState extends State<LoginProvider> {
                 ),
                 ),
               ),
+              Column(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      clickNavigation3();
+                    },
+                    child: Text("Forgot Password?",
+                        style: TextStyle(
+                            color: Color(0xFF5d74e3),
+                            fontSize: 15.0,
+                            fontFamily: "Poppins-Bold")),
+                  ),
+                ],
+              ),
               Padding(
-                padding: const EdgeInsets.only(top:60, bottom:35,),
-
-                child: Column(verticalDirection: VerticalDirection.down,
+                padding: const EdgeInsets.fromLTRB(0.0,110.0,0.0,20.0),
+                child: Column(
                   //crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Text(
@@ -310,7 +326,7 @@ class LoginProviderFormState extends State<LoginProvider> {
                     ),
                   ],
                 ),
-              )
+              ),
             ]
         ),
       ),

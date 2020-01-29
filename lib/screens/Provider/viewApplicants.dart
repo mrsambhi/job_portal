@@ -39,9 +39,10 @@ class ViewApplicantsState extends State<ViewApplicants> {
       reply = await response.transform(utf8.decoder).join();
       httpClient.close();
       Map data = json.decode(reply);
-      var result1 =  data['result'];
-      result = result1['data'];
+      result =  data['result'];
       if(result!=null){
+        print("$result");
+        print("$result.length");
         setState(() {
           isLoader=false;
         });
@@ -79,9 +80,10 @@ class ViewApplicantsState extends State<ViewApplicants> {
   } _incrementCounter() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {
-      id=prefs.getString(Constants.userId);
+      id=prefs.getString(Constants.jobId);
+      print("$id");
       Map map={"id": id} ;
-      this.getData(Constants.providerProfile,map);
+      this.getData(Constants.viewApplicants,map);
     });}
 
   @override
@@ -110,36 +112,36 @@ class ViewApplicantsState extends State<ViewApplicants> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text("${result[index][""]}",style: TextStyle(
+                        Text("${result[index]["name"]}",style: TextStyle(
                           fontSize: 20,
                           color: Colors.cyan[600],
                         ),
                           textAlign: TextAlign.left,),
                         Padding(
                           padding: const EdgeInsets.only(top:8.0),
-                          child: Text("Place                  :${result[index][""]}",style: TextStyle(
+                          child: Text("Email                          :${result[index]["email"]}",style: TextStyle(
                             fontSize: 15,
                             color: Colors.black,
                           ),
                             textAlign: TextAlign.left,
                           ),
                         ),
-                        Text("Category            :${result[index][""]}",style: TextStyle(
+                        Text("Address                     :${result[index]["address"]}",style: TextStyle(
                           fontSize:15,
                           color: Colors.black,
                         ),
                           textAlign: TextAlign.left,),
-                        Text("Status                 :${result[index][""]}",style: TextStyle(
+                        Text("Mobile No.                :${result[index]["mobile"]}",style: TextStyle(
                           fontSize: 15,
                           color: Colors.black,
                         ),
                           textAlign: TextAlign.left,),
-                        Text("Skills Required  :${result[index][""]}",style: TextStyle(
+                        Text("Current Industry       :${result[index]["current_industry"]}",style: TextStyle(
                           fontSize: 15,
                           color: Colors.black,
                         ),
                           textAlign: TextAlign.left,),
-                        Text("Apply By  :${result[index][""]}",style: TextStyle(
+                        Text("Qualification  :${result[index]["qualification"]}",style: TextStyle(
                           fontSize: 15,
                           color: Colors.black,
                         ),
@@ -147,30 +149,7 @@ class ViewApplicantsState extends State<ViewApplicants> {
                         Divider( thickness: .9,
                             color: Colors.black
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(bottom:5.0),
-                          child: Align(
-                              alignment: Alignment.bottomRight,
-                              child:
-                              Padding(
-                                padding: const EdgeInsets.only(right: 8.0),
-                                child: FlatButton(
-                                  color: Colors.cyan,
-                                  textColor: Colors.white,
-                                  disabledColor: Colors.grey,
-                                  disabledTextColor: Colors.black,
-                                  splashColor: Colors.cyanAccent,
-                                  onPressed: () {
 
-                                  },
-                                  child: Text(
-                                    "View Details",
-                                    style: TextStyle(fontSize: 10.0),
-                                  ),
-                                ),
-                              )
-                          ),
-                        )
                       ],
                     ),
                   ),
